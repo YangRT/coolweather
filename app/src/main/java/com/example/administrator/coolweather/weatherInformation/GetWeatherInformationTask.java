@@ -1,22 +1,25 @@
 package com.example.administrator.coolweather.weatherInformation;
 
+import android.util.Log;
+
 import com.example.administrator.coolweather.NetTask;
 import com.example.administrator.coolweather.NetTaskCallback;
 import com.example.administrator.coolweather.utils.ConfigUtils;
 import com.example.administrator.coolweather.utils.NetUtils;
-import com.example.administrator.coolweather.weatherInformation.model.DailyForecastInfo;
-import com.example.administrator.coolweather.weatherInformation.model.LifeStyleInfo;
-import com.example.administrator.coolweather.weatherInformation.model.NowWeatherInfo;
+import com.example.administrator.coolweather.weatherInformation.model.NowWeather;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
 public class GetWeatherInformationTask implements NetTask<String> {
+    private final static String TAG = "GetWeatherInformation";
     private static GetWeatherInformationTask INSTANCE = null;
     private Retrofit retrofit;
-
+    private Disposable disposable;
     GetWeatherInformationTask(){
         createRetrofit();
     }
@@ -31,23 +34,36 @@ public class GetWeatherInformationTask implements NetTask<String> {
         retrofit = NetUtils.getInstance().getRetrofitInstance(ConfigUtils.WEATHER);
     }
     @Override
-    public Disposable execute(String data, NetTaskCallback callback) {
+    public Disposable execute(String data, final NetTaskCallback callback) {
+
         GetNowWeatherService nowWeatherService = retrofit.create(GetNowWeatherService.class);
-        Observable<NowWeatherInfo> nowWeather = nowWeatherService.getWeatherInformation(data);
-        GetDailyForecastService dailyForecastService = retrofit.create(GetDailyForecastService.class);
-        Observable<DailyForecastInfo> dailyForecast = dailyForecastService.getDailyForecastInfo(data);
-        GetLifeStyleService lifeStyleService = retrofit.create(GetLifeStyleService.class);
-        Observable<LifeStyleInfo> lifeStyle = lifeStyleService.getLifeStyleInfo(data);
-        return new Disposable() {
-            @Override
-            public void dispose() {
+        final Observable<NowWeather> nowWeather = nowWeatherService.getWeatherInformation(data,ConfigUtils.KEY_ID);
+        nowWeather.subscribeOn(Schedulers.io())
+                  .observeOn(AndroidSchedulers.mainThread())
+                  .subscribe(new Observer<NowWeather>() {
+                      @Override
+                      public void onSubscribe(Disposable d) {
+                          disposable = d;
+                      }
 
-            }
+                      @Override
+                      public void onNext(NowWeather nowWeatherInfo) {
+                          Log.d(TAG,"onNext");
+                            callback.onSuccess(nowWeatherInfo);
+                      }
 
-            @Override
-            public boolean isDisposed() {
-                return false;
-            }
-        };
+                      @Override
+                      public void onError(Throwable e) {
+                          Log.d(TAG,"onError");
+                            callback.onFailed(e.toString());
+                      }
+
+                      @Override
+                      public void onComplete() {
+
+                      }
+                  });
+        return disposable;
+
     }
 }
