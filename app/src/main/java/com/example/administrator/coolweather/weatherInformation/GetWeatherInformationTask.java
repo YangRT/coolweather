@@ -15,7 +15,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 
-public class GetWeatherInformationTask implements NetTask<String> {
+public class GetWeatherInformationTask implements WeatherTask<String> {
     private final static String TAG = "GetWeatherInformation";
     private static GetWeatherInformationTask INSTANCE = null;
     private Retrofit retrofit;
@@ -34,7 +34,7 @@ public class GetWeatherInformationTask implements NetTask<String> {
         retrofit = NetUtils.getInstance().getRetrofitInstance(ConfigUtils.WEATHER);
     }
     @Override
-    public Disposable execute(String data, final NetTaskCallback callback) {
+    public Disposable execute(String data, final GetWeatherCallback callback) {
 
         GetNowWeatherService nowWeatherService = retrofit.create(GetNowWeatherService.class);
         final Observable<NowWeather> nowWeather = nowWeatherService.getWeatherInformation(data,ConfigUtils.KEY_ID);
@@ -49,13 +49,14 @@ public class GetWeatherInformationTask implements NetTask<String> {
                       @Override
                       public void onNext(NowWeather nowWeatherInfo) {
                           Log.d(TAG,"onNext");
-                            callback.onSuccess(nowWeatherInfo);
+                          callback.getNowWeatherSuccess(nowWeatherInfo);
+
                       }
 
                       @Override
                       public void onError(Throwable e) {
                           Log.d(TAG,"onError");
-                            callback.onFailed(e.toString());
+
                       }
 
                       @Override

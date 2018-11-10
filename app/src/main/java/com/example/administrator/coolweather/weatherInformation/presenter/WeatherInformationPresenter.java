@@ -3,17 +3,22 @@ package com.example.administrator.coolweather.weatherInformation.presenter;
 import android.util.Log;
 
 import com.example.administrator.coolweather.NetTaskCallback;
+import com.example.administrator.coolweather.weatherInformation.GetWeatherCallback;
 import com.example.administrator.coolweather.weatherInformation.GetWeatherInformationTask;
 import com.example.administrator.coolweather.weatherInformation.WeatherInformationContract;
+import com.example.administrator.coolweather.weatherInformation.WeatherTask;
+import com.example.administrator.coolweather.weatherInformation.model.AirCondition;
+import com.example.administrator.coolweather.weatherInformation.model.LifeStyleInformation;
 import com.example.administrator.coolweather.weatherInformation.model.NowWeather;
+import com.example.administrator.coolweather.weatherInformation.model.WeatherForecast;
 
 import java.util.List;
 
-public class WeatherInformationPresenter implements WeatherInformationContract.Presenter,NetTaskCallback<NowWeather> {
+public class WeatherInformationPresenter implements WeatherInformationContract.Presenter,GetWeatherCallback {
     private final static String TAG = "presenter";
     private WeatherInformationContract.View view;
-    private GetWeatherInformationTask task;
-    public WeatherInformationPresenter(WeatherInformationContract.View view, GetWeatherInformationTask task){
+    private WeatherTask task;
+    public WeatherInformationPresenter(WeatherInformationContract.View view,WeatherTask task){
         this.view = view;
         this.task = task;
     }
@@ -33,38 +38,53 @@ public class WeatherInformationPresenter implements WeatherInformationContract.P
     }
 
     @Override
-    public void setNowWeatherInfo(List<NowWeather> info) {
+    public void setNowWeatherInfo(NowWeather info) {
 
     }
 
     @Override
-    public void setLifeStyleInfo(List<NowWeather> info) {
+    public void setLifeStyleInfo(LifeStyleInformation info) {
 
     }
 
     @Override
-    public void setDailyForcastInfo(List<NowWeather> info) {
+    public void setDailyForecastInfo(WeatherForecast info) {
+
+    }
+
+    @Override
+    public void setAirConditionInfo(AirCondition info) {
 
     }
 
 
     @Override
-    public void onSuccess(NowWeather nowWeather) {
-        view.setNowWeatherInfo(nowWeather);
+    public void getNowWeatherSuccess(NowWeather info) {
+        view.setNowWeatherInfo(info);
     }
 
     @Override
-    public void onStart() {
+    public void getWeatherForecasrSuccess() {
 
     }
 
     @Override
-    public void onFailed(String msg) {
-        view.showError();
+    public void getHourlyWeatherSuccess() {
+
     }
 
     @Override
-    public void onFinish() {
+    public void getLifeStyleSuccess() {
+
+    }
+
+    @Override
+    public void getAirCoditionSuccess() {
+
+    }
+
+    @Override
+    public void onFial(String which) {
 
     }
 }
