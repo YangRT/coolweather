@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <TextView
+        android:textSize="15sp"
+        android:textColor="#000000"
+        android:id="@+id/hourly_weather_time"
+        android:text="@string/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp" />
+    <TextView
+        android:id="@+id/hourly_weather_text"
+        android:textSize="15sp"
+        android:textColor="#000000"
+        android:text="@string/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp" />
+    <TextView
+        android:textSize="15sp"
+        android:id="@+id/hourly_weather_temp"
+        android:textColor="#000000"
+        android:text="@string/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp" />
+</LinearLayout>

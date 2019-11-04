@@ -6,10 +6,13 @@ import com.example.administrator.coolweather.NetTask;
 import com.example.administrator.coolweather.NetTaskCallback;
 import com.example.administrator.coolweather.utils.ConfigUtils;
 import com.example.administrator.coolweather.utils.NetUtils;
+import com.example.administrator.coolweather.weatherInformation.model.HourlyWeather;
 import com.example.administrator.coolweather.weatherInformation.model.NowWeather;
+import com.example.administrator.coolweather.weatherInformation.model.WeatherForecast;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -35,7 +38,6 @@ public class GetWeatherInformationTask implements WeatherTask<String> {
     }
     @Override
     public Disposable execute(String data, final GetWeatherCallback callback) {
-
         GetNowWeatherService nowWeatherService = retrofit.create(GetNowWeatherService.class);
         final Observable<NowWeather> nowWeather = nowWeatherService.getWeatherInformation(data,ConfigUtils.KEY_ID);
         nowWeather.subscribeOn(Schedulers.io())
@@ -57,6 +59,59 @@ public class GetWeatherInformationTask implements WeatherTask<String> {
                       public void onError(Throwable e) {
                           Log.d(TAG,"onError");
 
+                      }
+
+                      @Override
+                      public void onComplete() {
+
+                      }
+                  });
+        GetDailyForecastService dailyForecastService = retrofit.create(GetDailyForecastService.class);
+        Observable<WeatherForecast> weatherForecast = dailyForecastService.getDailyForecastInfo(data,ConfigUtils.KEY_ID);
+        weatherForecast.subscribeOn(Schedulers.io())
+                       .observeOn(AndroidSchedulers.mainThread())
+                       .subscribe(new Observer<WeatherForecast>() {
+                           @Override
+                           public void onSubscribe(Disposable d) {
+
+                           }
+
+                           @Override
+                           public void onNext(WeatherForecast weatherForecast) {
+                                Log.d(TAG,weatherForecast.getHeWeather6().get(0).getStatus());
+                                callback.getWeatherForecastSuccess(weatherForecast);
+                           }
+
+                           @Override
+                           public void onError(Throwable e) {
+                                callback.onFial(e.toString());
+                           }
+
+                           @Override
+                           public void onComplete() {
+
+                           }
+                       });
+        GetHourlyWeatherService hourlyWeatherService = retrofit.create(GetHourlyWeatherService.class);
+        Observable<HourlyWeather> observable = hourlyWeatherService.getHourlyWeather(data,ConfigUtils.KEY_ID);
+        observable.subscribeOn(Schedulers.io())
+                  .observeOn(AndroidSchedulers.mainThread())
+                  .subscribe(new Observer<HourlyWeather>() {
+                      @Override
+                      public void onSubscribe(Disposable d) {
+
+                      }
+
+                      @Override
+                      public void onNext(HourlyWeather weather) {
+                          Log.d(TAG,weather.getHeWeather6().get(0).getStatus());
+                            callback.getHourlyWeatherSuccess(weather);
+                      }
+
+                      @Override
+                      public void onError(Throwable e) {
+                          Log.d(TAG,e.toString());
+                          callback.onFial(e.toString());
                       }
 
                       @Override

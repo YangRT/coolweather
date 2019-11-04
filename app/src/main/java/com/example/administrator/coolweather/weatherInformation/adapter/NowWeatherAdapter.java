@@ -39,17 +39,17 @@ public class NowWeatherAdapter extends RecyclerView.Adapter<NowWeatherAdapter.Vi
             holder.tvNowWeatherTitle.setText("能见度");
             holder.tvNowWeatherData.setText(String.format("%skm", nowWeather.getHeWeather6().get(0).getNow().getVis()));
         } else if(position == 3){
-            holder.ivNowWeatherIcon.setImageResource(R.drawable.jyl);
-            holder.tvNowWeatherTitle.setText("降水量");
-            holder.tvNowWeatherData.setText(nowWeather.getHeWeather6().get(0).getNow().getPcpn());
-        }else if (position == 4){
             holder.ivNowWeatherIcon.setImageResource(R.drawable.dqyq);
             holder.tvNowWeatherTitle.setText("大气压强");
             holder.tvNowWeatherData.setText(nowWeather.getHeWeather6().get(0).getNow().getPres());
-        }else if (position == 5){
+        }else if (position == 4){
             holder.ivNowWeatherIcon.setImageResource(R.drawable.flfj);
             holder.tvNowWeatherTitle.setText("风向风力");
             holder.tvNowWeatherData.setText(String.format("%s%s级", nowWeather.getHeWeather6().get(0).getNow().getWind_dir(), nowWeather.getHeWeather6().get(0).getNow().getWind_sc()));
+        }else if (position == 5){
+            holder.ivNowWeatherIcon.setImageResource(R.drawable.jyl);
+            holder.tvNowWeatherTitle.setText("降水量");
+            holder.tvNowWeatherData.setText(nowWeather.getHeWeather6().get(0).getNow().getPcpn());
         }
 
     }

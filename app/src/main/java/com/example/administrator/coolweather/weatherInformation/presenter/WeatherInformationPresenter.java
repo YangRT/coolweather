@@ -8,6 +8,7 @@ import com.example.administrator.coolweather.weatherInformation.GetWeatherInform
 import com.example.administrator.coolweather.weatherInformation.WeatherInformationContract;
 import com.example.administrator.coolweather.weatherInformation.WeatherTask;
 import com.example.administrator.coolweather.weatherInformation.model.AirCondition;
+import com.example.administrator.coolweather.weatherInformation.model.HourlyWeather;
 import com.example.administrator.coolweather.weatherInformation.model.LifeStyleInformation;
 import com.example.administrator.coolweather.weatherInformation.model.NowWeather;
 import com.example.administrator.coolweather.weatherInformation.model.WeatherForecast;
@@ -37,26 +38,6 @@ public class WeatherInformationPresenter implements WeatherInformationContract.P
         task.execute(location,this);
     }
 
-    @Override
-    public void setNowWeatherInfo(NowWeather info) {
-
-    }
-
-    @Override
-    public void setLifeStyleInfo(LifeStyleInformation info) {
-
-    }
-
-    @Override
-    public void setDailyForecastInfo(WeatherForecast info) {
-
-    }
-
-    @Override
-    public void setAirConditionInfo(AirCondition info) {
-
-    }
-
 
     @Override
     public void getNowWeatherSuccess(NowWeather info) {
@@ -64,27 +45,27 @@ public class WeatherInformationPresenter implements WeatherInformationContract.P
     }
 
     @Override
-    public void getWeatherForecasrSuccess() {
-
+    public void getWeatherForecastSuccess(WeatherForecast info) {
+        view.setDailyForecastInfo(info);
     }
 
     @Override
-    public void getHourlyWeatherSuccess() {
-
+    public void getHourlyWeatherSuccess(HourlyWeather info) {
+        view.setHourlyWeatherInfo(info);
     }
 
     @Override
-    public void getLifeStyleSuccess() {
-
+    public void getLifeStyleSuccess(LifeStyleInformation info) {
+        view.setLifeStyleInfo(info);
     }
 
     @Override
-    public void getAirCoditionSuccess() {
-
+    public void getAirConditionSuccess(AirCondition info) {
+        view.setAirConditionInfo(info);
     }
 
     @Override
     public void onFial(String which) {
-
+        view.showError(which);
     }
 }
